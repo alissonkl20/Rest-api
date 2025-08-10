@@ -1,0 +1,205 @@
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cardápio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✔️</text></svg>">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #121212 0%, #1a2e35 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            box-sizing: border-box;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 24px;
+            background: rgba(30, 30, 30, 0.9);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid #444;
+        }
+        h1 {
+            color: #4caf7d;
+            text-align: center;
+            margin-top: 0;
+            font-size: 2.5em;
+            letter-spacing: 2px;
+        }
+        h2 {
+            color: #6bbd99;
+            margin-top: 40px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.5em;
+        }
+        h3 {
+            color: #6bbd99;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: left;
+            font-size: 1.2em;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 400px;
+            margin: 0 auto 30px auto;
+        }
+        li {
+            background: #2a2a2a;
+            margin: 10px 0;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            font-size: 1.1em;
+            color: #e0e0e0;
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: fadeIn 0.7s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            word-break: break-word;
+            border: 1px solid #444;
+        }
+        li span:first-child {
+            flex-shrink: 0;
+        }
+        li:hover {
+            transform: scale(1.04);
+            box-shadow: 0 4px 16px rgba(107, 189, 153, 0.3);
+            background: #333;
+        }
+        .total-produtos {
+            font-weight: bold;
+            color: #4caf7d;
+            font-size: 1.2em;
+            margin-top: 20px;
+            text-align: center;
+        }
+        .erro {
+            color: #ff6b6b;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+            animation: shake 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        @keyframes shake {
+            0% { transform: translateX(0);}
+            25% { transform: translateX(-5px);}
+            50% { transform: translateX(5px);}
+            75% { transform: translateX(-5px);}
+            100% { transform: translateX(0);}
+        }
+        /* Responsividade */
+        @media (max-width: 700px) {
+            .container {
+                max-width: 98vw;
+                padding: 10px;
+            }
+            ul {
+                max-width: 98vw;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            h2 {
+                font-size: 1.2em;
+            }
+            h3 {
+                font-size: 1.1em;
+            }
+            li {
+                font-size: 1em;
+                padding: 12px 10px;
+            }
+        }
+        @media (max-width: 500px) {
+            .container {
+                margin: 10px auto;
+                padding: 5vw;
+                border-radius: 10px;
+            }
+            ul {
+                max-width: 100vw;
+            }
+            h1 {
+                font-size: 1.3em;
+            }
+            h2 {
+                font-size: 1em;
+            }
+            h3 {
+                font-size: 0.9em;
+            }
+            li {
+                font-size: 0.95em;
+                padding: 8px 5px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            li span {
+                margin-bottom: 4px;
+            }
+        } 
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cardápio</h1>
+        
+        {% if dados.erro %}
+            <p class="erro">{{ dados.erro }}</p>
+        {% else %}
+            <p style="text-align:center;">Atualizado em: <span style="color:#6bbd99;">{{ dados.atualizado_em }}</span></p>
+            
+            {% if dados.categorias %}
+                {% for categoria, produtos in dados.categorias.items() %}
+                    <h2>{{ categoria }}</h2>
+                    
+                    <h3 style="color:#6bbd99;">Disponíveis</h3>
+                    <ul>
+                        {% if produtos.disponiveis %}
+                            {% for produto in produtos.disponiveis %}
+                                <li>
+                                    <span>{{ produto.nome }}</span>
+                                    <span>R$ {{ "%.2f"|format(produto.preco) }}</span>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li>Nenhum produto disponível</li>
+                        {% endif %}
+                    </ul>
+                    
+                    <h3 style="color:#ff6b6b;">Indisponíveis</h3>
+                    <ul>
+                        {% if produtos.indisponiveis %}
+                            {% for produto in produtos.indisponiveis %}
+                                <li>
+                                    <span>{{ produto.nome }}</span>
+                                    <span>R$ {{ "%.2f"|format(produto.preco) }}</span>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <li>Nenhum produto indisponível</li>
+                        {% endif %}
+                    </ul>
+                {% endfor %}
+            {% else %}
+                <p class="erro">Nenhuma categoria disponível</p>
+            {% endif %}
+            
+            <p class="total-produtos">Total de produtos: {{ dados.total_produtos }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
