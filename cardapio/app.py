@@ -1,7 +1,6 @@
-from flask import Flask, render_template, render_template_string
+from flask import Flask, render_template
 from datetime import datetime
 import requests
-from flask_cors import CORS
 from collections import defaultdict
 import time
 
@@ -9,16 +8,7 @@ app = Flask(__name__,
             static_folder='static',
             template_folder='templates')
 
-CORS(app, resources={
-    r"/api/*": {
-        "origins": ["http://127.0.0.1:5001"],
-        "methods": ["GET", "POST", "PUT", "DELETE"],
-        "allow_headers": ["Content-Type"]
-    }
-})
-
 API_BASE_URL = 'http://127.0.0.1:5000/api' 
-
 
 def get_api_data(endpoint):
     try:
@@ -36,6 +26,7 @@ def agrupar_por_categoria(produtos):
     categorias = defaultdict(lambda: {"disponiveis": [], "indisponiveis": []})
     for produto in produtos:
         try:
+            # Ajuste para a estrutura esperada
             nome_categoria = produto.get("categoria", {}).get("nome", "Sem categoria")
             produto_formatado = {
                 "nome": produto.get("nome", "Sem nome"),
@@ -51,7 +42,7 @@ def agrupar_por_categoria(produtos):
             continue
     
     return {
-        "categorias": dict(categorias),
+        "categorias": dict(categorias),  # Convertendo para dict padrão
         "total_produtos": len(produtos) if produtos else 0
     }
 
@@ -84,18 +75,6 @@ def dashboard():
             'categorias': {},
             'total_produtos': 0
         })
-
-def gerar_formulario_produto_html():
-    return """
-    <!DOCTYPE html>
-    <html lang="pt-BR">
-    <!-- Seu conteúdo HTML aqui -->
-    </html>
-    """
-
-@app.route('/admin')
-def admin_page():
-    return render_template('admin.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
