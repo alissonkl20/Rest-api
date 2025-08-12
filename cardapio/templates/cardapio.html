@@ -22,6 +22,7 @@
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border: 1px solid #444;
+            position: relative;
         }
         h1 {
             color: #4caf7d;
@@ -89,6 +90,28 @@
             margin-top: 20px;
             animation: shake 0.5s;
         }
+        .admin-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, #6bbd99, #4caf7d);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(107, 189, 153, 0.4);
+            background: linear-gradient(45deg, #4caf7d, #6bbd99);
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px);}
             to { opacity: 1; transform: translateY(0);}
@@ -122,6 +145,12 @@
                 font-size: 1em;
                 padding: 12px 10px;
             }
+            .admin-btn {
+                position: static;
+                display: block;
+                margin: 10px auto;
+                width: fit-content;
+            }
         }
         @media (max-width: 500px) {
             .container {
@@ -154,8 +183,10 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Cardápio</h1>
+   <div class="container">
+    <a href="{{ url_for('admin_page') }}" class="admin-btn">Gerenciar Cardápio</a>
+    <h1>Cardápio</h1>
+</div>
         
         {% if dados.erro %}
             <p class="erro">{{ dados.erro }}</p>
@@ -163,7 +194,7 @@
             <p style="text-align:center;">Atualizado em: <span style="color:#6bbd99;">{{ dados.atualizado_em }}</span></p>
             
             {% if dados.categorias %}
-                {% for categoria, produtos in dados.categorias.items() %}
+               {% for categoria, produtos in dados.categorias.items() %}
                     <h2>{{ categoria }}</h2>
                     
                     <h3 style="color:#6bbd99;">Disponíveis</h3>
