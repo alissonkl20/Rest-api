@@ -1,7 +1,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cardápio</title>
+    <title>Cardápio Organizado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✔️</text></svg>">
     <style>
@@ -22,7 +22,6 @@
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border: 1px solid #444;
-            position: relative;
         }
         h1 {
             color: #4caf7d;
@@ -31,25 +30,34 @@
             font-size: 2.5em;
             letter-spacing: 2px;
         }
-        h2 {
-            color: #6bbd99;
+        .categoria {
             margin-top: 40px;
-            margin-bottom: 10px;
+            background: rgba(40, 40, 40, 0.7);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #444;
+        }
+        .categoria-titulo {
+            color: #6bbd99;
+            margin-top: 0;
+            margin-bottom: 15px;
             text-align: center;
             font-size: 1.5em;
         }
-        h3 {
+        .status-titulo {
             color: #6bbd99;
             margin-top: 20px;
             margin-bottom: 10px;
             text-align: left;
             font-size: 1.2em;
         }
+        .status-titulo.indisponivel {
+            color: #ff6b6b;
+        }
         ul {
             list-style: none;
             padding: 0;
-            max-width: 400px;
-            margin: 0 auto 30px auto;
+            margin: 0 0 20px 0;
         }
         li {
             background: #2a2a2a;
@@ -90,27 +98,10 @@
             margin-top: 20px;
             animation: shake 0.5s;
         }
-        .admin-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(45deg, #6bbd99, #4caf7d);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-            display: inline-block;
-            font-size: 0.9em;
-        }
-        .admin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(107, 189, 153, 0.4);
-            background: linear-gradient(45deg, #4caf7d, #6bbd99);
+        .sem-produtos {
+            color: #888;
+            font-style: italic;
+            text-align: center;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px);}
@@ -123,7 +114,6 @@
             75% { transform: translateX(-5px);}
             100% { transform: translateX(0);}
         }
-        /* Responsividade */
         @media (max-width: 700px) {
             .container {
                 max-width: 98vw;
@@ -135,21 +125,15 @@
             h1 {
                 font-size: 2em;
             }
-            h2 {
+            .categoria-titulo {
                 font-size: 1.2em;
             }
-            h3 {
+            .status-titulo {
                 font-size: 1.1em;
             }
             li {
                 font-size: 1em;
                 padding: 12px 10px;
-            }
-            .admin-btn {
-                position: static;
-                display: block;
-                margin: 10px auto;
-                width: fit-content;
             }
         }
         @media (max-width: 500px) {
@@ -164,10 +148,10 @@
             h1 {
                 font-size: 1.3em;
             }
-            h2 {
+            .categoria-titulo {
                 font-size: 1em;
             }
-            h3 {
+            .status-titulo {
                 font-size: 0.9em;
             }
             li {
@@ -183,54 +167,146 @@
     </style>
 </head>
 <body>
-   <div class="container">
-    <a href="{{ url_for('admin_page') }}" class="admin-btn">Gerenciar Cardápio</a>
-    <h1>Cardápio</h1>
-</div>
+    <div class="container">
+        <h1>Cardápio Organizado</h1>
+        <p style="text-align:center;">Atualizado em: <span style="color:#6bbd99;">11/08/2025 22:40:08</span></p>
         
-        {% if dados.erro %}
-            <p class="erro">{{ dados.erro }}</p>
-        {% else %}
-            <p style="text-align:center;">Atualizado em: <span style="color:#6bbd99;">{{ dados.atualizado_em }}</span></p>
+        <!-- Categoria de Pães -->
+        <div class="categoria">
+            <h2 class="categoria-titulo">Pães</h2>
             
-            {% if dados.categorias %}
-               {% for categoria, produtos in dados.categorias.items() %}
-                    <h2>{{ categoria }}</h2>
-                    
-                    <h3 style="color:#6bbd99;">Disponíveis</h3>
-                    <ul>
-                        {% if produtos.disponiveis %}
-                            {% for produto in produtos.disponiveis %}
-                                <li>
-                                    <span>{{ produto.nome }}</span>
-                                    <span>R$ {{ "%.2f"|format(produto.preco) }}</span>
-                                </li>
-                            {% endfor %}
-                        {% else %}
-                            <li>Nenhum produto disponível</li>
-                        {% endif %}
-                    </ul>
-                    
-                    <h3 style="color:#ff6b6b;">Indisponíveis</h3>
-                    <ul>
-                        {% if produtos.indisponiveis %}
-                            {% for produto in produtos.indisponiveis %}
-                                <li>
-                                    <span>{{ produto.nome }}</span>
-                                    <span>R$ {{ "%.2f"|format(produto.preco) }}</span>
-                                </li>
-                            {% endfor %}
-                        {% else %}
-                            <li>Nenhum produto indisponível</li>
-                        {% endif %}
-                    </ul>
-                {% endfor %}
-            {% else %}
-                <p class="erro">Nenhuma categoria disponível</p>
-            {% endif %}
+            <h3 class="status-titulo">Disponíveis</h3>
+            <ul>
+                <li>
+                    <span>Pão fit</span>
+                    <span>R$ 30.00</span>
+                </li>
+                <li>
+                    <span>Pão doce de leite</span>
+                    <span>R$ 50.00</span>
+                </li>
+                <li>
+                    <span>Pão fruta</span>
+                    <span>R$ 30.00</span>
+                </li>
+                <li>
+                    <span>Pão de mandioca</span>
+                    <span>R$ 25.00</span>
+                </li>
+                <li>
+                    <span>Pão de trigo</span>
+                    <span>R$ 25.00</span>
+                </li>
+            </ul>
             
-            <p class="total-produtos">Total de produtos: {{ dados.total_produtos }}</p>
-        {% endif %}
+            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
+            <ul>
+                <li>
+                    <span>Pão de ma</span>
+                    <span>R$ 30.00</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Categoria de Bolos -->
+        <div class="categoria">
+            <h2 class="categoria-titulo">Bolos</h2>
+            
+            <h3 class="status-titulo">Disponíveis</h3>
+            <ul>
+                <li>
+                    <span>Bolo de farofa</span>
+                    <span>R$ 25.00</span>
+                </li>
+                <li>
+                    <span>Bolo de banana</span>
+                    <span>R$ 25.00</span>
+                </li>
+            </ul>
+            
+            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
+            <ul>
+                <li>
+                    <span>Bolo de leite ninho</span>
+                    <span>R$ 36.00</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Categoria de Mousses -->
+        <div class="categoria">
+            <h2 class="categoria-titulo">Mousses</h2>
+            
+            <h3 class="status-titulo">Disponíveis</h3>
+            <ul>
+                <li>
+                    <span>Mousse de maracujá</span>
+                    <span>R$ 12.00</span>
+                </li>
+                <li>
+                    <span>Mousse de limão</span>
+                    <span>R$ 12.00</span>
+                </li>
+                <li>
+                    <span>Mousse de chocolate</span>
+                    <span>R$ 12.00</span>
+                </li>
+            </ul>
+            
+            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
+            <ul>
+                <li class="sem-produtos">Nenhum mousse indisponível</li>
+            </ul>
+        </div>
+
+        <!-- Categoria de Tortas -->
+        <div class="categoria">
+            <h2 class="categoria-titulo">Tortas</h2>
+            
+            <h3 class="status-titulo">Disponíveis</h3>
+            <ul>
+                <li>
+                    <span>Torta de calabresa</span>
+                    <span>R$ 30.00</span>
+                </li>
+            </ul>
+            
+            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
+            <ul>
+                <li class="sem-produtos">Nenhuma torta indisponível</li>
+            </ul>
+        </div>
+
+        <!-- Categoria de Pastéis -->
+        <div class="categoria">
+            <h2 class="categoria-titulo">Pastéis</h2>
+            
+            <h3 class="status-titulo">Disponíveis</h3>
+            <ul>
+                <li>
+                    <span>Pastel de frango</span>
+                    <span>R$ 14.00</span>
+                </li>
+                <li>
+                    <span>Pastel de bacon</span>
+                    <span>R$ 14.00</span>
+                </li>
+            </ul>
+            
+            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
+            <ul>
+                <li>
+                    <span>Pastel de calabresa</span>
+                    <span>R$ 16.00</span>
+                </li>
+                <li>
+                    <span>Pastel de cheddar</span>
+                    <span>R$ 18.00</span>
+                </li>
+            </ul>
+        </div>
+
+        <p class="total-produtos">Total de produtos: 17</p>
     </div>
 </body>
 </html>

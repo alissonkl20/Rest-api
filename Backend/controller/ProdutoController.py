@@ -2,6 +2,8 @@ from flask import Blueprint, request, jsonify, abort
 from http import HTTPStatus
 from decimal import Decimal
 from model.ProdutoModel import ProdutoModel
+from extensions import db
+from model.CategoriaModel import CategoriaModel
 from repository.ProdutoRepository import ProdutoRepository
 
 produto_bp = Blueprint('produtos', __name__, url_prefix='/api/produtos')
@@ -22,15 +24,26 @@ def criar_produto():
         abort(HTTPStatus.BAD_REQUEST, description="Campos obrigatórios faltando")
     
     try:
+        # Busca a categoria primeiro
+        categoria = CategoriaModel.query.get(data['categoria_id'])
+        if not categoria:
+            abort(HTTPStatus.NOT_FOUND, description="Categoria não encontrada")
+        
+        # Cria o produto passando o objeto categoria
         produto = ProdutoModel(
             nome=data['nome'],
             preco=Decimal(str(data['preco'])),
             disponivel=data.get('disponivel', True),
-            categoria_id=data['categoria_id']
+            categoria=categoria  # Agora passando o objeto, não o ID
         )
-        repo.save(produto)
-        return jsonify(produto.to_dict()), HTTPStatus.CREATED  # Adicionado status code
-    except ValueError as e:
-        abort(HTTPStatus.BAD_REQUEST, description=str(e))
+        
+        db.session.add(produto)
+        db.session.commit()
+        
+        return produto.to_dict(), HTTPStatus.CREATED
+        
+    except Exception as e:
+        db.session.rollback()
+        abort(HTTPStatus.INTERNAL_SERVER_ERROR, description=str(e))
 
 # ... (outros endpoints permanecem iguais) ...
