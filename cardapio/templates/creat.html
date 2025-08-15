@@ -5,8 +5,33 @@
     <title>Criação de Produto | Dashboard Neon</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="color-scheme" content="light dark">
     <style>
-       :root {
+        :root {
+            /* Light Theme */
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --danger-color: #e74a3b;
+            --card-bg: #ffffff;
+            --card-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            --border-color: #e3e6f0;
+            --hover-color: #f6f6f9;
+            
+            /* Dark Theme */
+            --bg-color-dark: #1a1a2e;
+            --text-color-dark: #f8f9fa;
+            --primary-color-dark: #6c63ff;
+            --secondary-color-dark: #20c997;
+            --danger-color-dark: #ff6b6b;
+            --card-bg-dark: #16213e;
+            --card-shadow-dark: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.4);
+            --border-color-dark: #2d3748;
+            --hover-color-dark: #2d3748;
+            
+            /* Neon Colors */
             --neon-green: #00ff75;
             --neon-blue: #3700ff;
             --neon-purple: #9d00ff;
@@ -17,21 +42,63 @@
             --transition: all 0.3s ease;
         }
 
+        [data-theme="light"] {
+            --bg-color: var(--bg-color);
+            --text-color: var(--text-color);
+            --primary-color: var(--primary-color);
+            --secondary-color: var(--secondary-color);
+            --danger-color: var(--danger-color);
+            --card-bg: var(--card-bg);
+            --card-shadow: var(--card-shadow);
+            --border-color: var(--border-color);
+            --hover-color: var(--hover-color);
+            
+            /* Neon colors in light mode */
+            --neon-green: #00a152;
+            --neon-blue: #2a00b3;
+            --neon-purple: #6a00b3;
+            --neon-pink: #b3009d;
+            --dark-bg: #f8f9fa;
+            --light-text: #212529;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: var(--bg-color-dark);
+            --text-color: var(--text-color-dark);
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --danger-color: var(--danger-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --card-shadow: var(--card-shadow-dark);
+            --border-color: var(--border-color-dark);
+            --hover-color: var(--hover-color-dark);
+            
+            /* Neon colors in dark mode */
+            --neon-green: #00ff75;
+            --neon-blue: #3700ff;
+            --neon-purple: #9d00ff;
+            --neon-pink: #ff00ea;
+            --dark-bg: #1a1a1a;
+            --light-text: #f0f0f0;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #0d0d0d;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            color: var(--light-text);
+            line-height: 1.6;
         }
 
         .glow-container {
@@ -44,11 +111,12 @@
         .container {
             width: 100%;
             max-width: 800px;
-            background: var(--dark-bg);
+            background: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
             transition: all 0.2s;
             padding: 3px;
+            box-shadow: var(--card-shadow);
         }
 
         .glow-container:hover {
@@ -60,7 +128,7 @@
         }
 
         .header {
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            background: linear-gradient(45deg, var(--primary-color), var(--neon-purple));
             color: white;
             padding: 25px 30px;
             text-align: center;
@@ -91,26 +159,25 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 400;
-            color: var(--light-text);
+            color: var(--text-color);
             transition: var(--transition);
         }
 
         .form-control {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #333;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
             font-size: 16px;
             transition: var(--transition);
-            background-color: #222;
-            color: white;
+            background-color: var(--card-bg);
+            color: var(--text-color);
         }
 
         .form-control:focus {
-            border-color: var(--neon-green);
+            border-color: var(--secondary-color);
             box-shadow: 0 0 10px rgba(0, 255, 117, 0.5);
             outline: none;
-            background-color: #2a2a2a;
         }
 
         .checkbox-group {
@@ -123,7 +190,7 @@
             width: 20px;
             height: 20px;
             margin-right: 10px;
-            accent-color: var(--neon-green);
+            accent-color: var(--secondary-color);
             cursor: pointer;
         }
 
@@ -135,7 +202,7 @@
 
         .btn {
             display: inline-block;
-            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            background: linear-gradient(45deg, var(--primary-color), var(--neon-purple));
             color: white;
             padding: 14px 28px;
             border: none;
@@ -144,7 +211,7 @@
             font-weight: 500;
             cursor: pointer;
             transition: var(--transition);
-            box-shadow: 0 0 15px rgba(55, 0, 255, 0.5);
+            box-shadow: var(--card-shadow);
             width: 100%;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -180,29 +247,29 @@
 
         .output-container {
             margin-top: 30px;
-            background: #222;
+            background: var(--card-bg);
             border-radius: 8px;
             padding: 20px;
-            border-left: 4px solid var(--neon-green);
-            box-shadow: 0 0 10px rgba(0, 255, 117, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: var(--card-shadow);
         }
 
         .output-container h2 {
             margin-bottom: 15px;
-            color: var(--neon-green);
+            color: var(--secondary-color);
             font-size: 1.3rem;
             text-shadow: 0 0 5px rgba(0, 255, 117, 0.3);
         }
 
         #jsonOutput {
-            background: #1a1a1a;
+            background: var(--bg-color);
             padding: 15px;
             border-radius: 6px;
             font-family: 'Courier New', monospace;
             font-size: 14px;
             overflow-x: auto;
-            border: 1px solid #333;
-            color: var(--neon-green);
+            border: 1px solid var(--border-color);
+            color: var(--secondary-color);
         }
 
         .message {
@@ -217,26 +284,26 @@
 
         .success {
             background-color: rgba(0, 255, 117, 0.1);
-            color: var(--neon-green);
-            border-left: 4px solid var(--neon-green);
-            box-shadow: 0 0 10px rgba(0, 255, 117, 0.2);
+            color: var(--secondary-color);
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: var(--card-shadow);
         }
 
         .error {
             background-color: rgba(255, 0, 106, 0.1);
-            color: #ff006a;
-            border-left: 4px solid #ff006a;
-            box-shadow: 0 0 10px rgba(255, 0, 106, 0.2);
+            color: var(--danger-color);
+            border-left: 4px solid var(--danger-color);
+            box-shadow: var(--card-shadow);
         }
 
         .floating-label {
             position: absolute;
             top: -18px;
             left: 15px;
-            background: var(--dark-bg);
+            background: var(--card-bg);
             padding: 0 5px;
             font-size: 12px;
-            color: var(--neon-green);
+            color: var(--secondary-color);
             font-weight: 500;
             opacity: 0;
             transition: var(--transition);
@@ -247,6 +314,35 @@
         .form-control:not(:placeholder-shown) + .floating-label {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--card-shadow);
+            border: none;
+            z-index: 100;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
         }
 
         /* Animações */
@@ -284,6 +380,16 @@
             }
         }
 
+        /* Lista de produtos */
+        #productNamesList {
+            list-style-type: none;
+        }
+
+        #productNamesList li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
         /* Responsividade */
         @media (max-width: 768px) {
             .header h1 {
@@ -315,15 +421,22 @@
             .form-control {
                 padding: 10px 12px;
             }
+            
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
+            }
         }
 
         .categoria-verde {
-            color: var(--neon-green);
+            color: var(--secondary-color);
             font-weight: bold;
         }
     </style>
 </head>
-<body>
+<body data-theme="light">
     <div class="glow-container animate__animated animate__fadeIn">
         <div class="container">
             <div class="header">
@@ -372,7 +485,7 @@
                         <span>Atualizar por Nome</span>
                     </button>
                 
-                    <button type="button" class="btn" onclick="deleteProductByName()" id="deleteByNameBtn" style="margin-top:10px; background: linear-gradient(45deg, #ff006a, #9d00ff);">
+                    <button type="button" class="btn" onclick="deleteProductByName()" id="deleteByNameBtn" style="margin-top:10px; background: linear-gradient(45deg, var(--danger-color), var(--neon-purple));">
                         <span>Deletar por Nome</span>
                     </button>
                 </form>
@@ -394,6 +507,10 @@
         </div>
     </div>
 
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <script>
         const API_BASE_URL = 'http://127.0.0.1:5000/api';
         
@@ -408,6 +525,46 @@
 
             // Carrega a lista de produtos cadastrados
             loadProductNames();
+        });
+
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
+        
+        // Apply the current theme
+        document.body.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+        
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            // Add animation
+            themeToggle.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                themeToggle.style.transform = 'scale(1)';
+            }, 100);
+        });
+        
+        // Update theme icon based on current theme
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+        
+        // Watch for system theme changes
+        prefersDarkScheme.addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.body.setAttribute('data-theme', newTheme);
+                updateThemeIcon(newTheme);
+            }
         });
 
         // Efeito ripple nos botões

@@ -1,14 +1,13 @@
 from flask import Flask, render_template
 from datetime import datetime
 import requests
-from collections import defaultdict
 import time
 
 app = Flask(__name__,
             static_folder='static',
             template_folder='templates')
 
-API_BASE_URL = 'http://127.0.0.1:5000/api' 
+API_BASE_URL = 'http://127.0.0.1:5000/api'
 
 def get_api_data(endpoint):
     try:
@@ -19,15 +18,34 @@ def get_api_data(endpoint):
         print(f"Erro ao acessar {endpoint}: {str(e)}")
         return None
 
+def normalizar_nome_categoria(nome):
+    # Remove espaços extras e padroniza os nomes
+    nome = nome.strip()
+    substituicoes = {
+        'Paes': 'Pães',
+        'Mousses': 'Mousses',
+        'Bolos': 'Bolos',
+        'Salgados': 'Pastéis'  # Mapeando Salgados para Pastéis
+    }
+    return substituicoes.get(nome, nome)
+
 def agrupar_por_categoria(produtos):
     if produtos is None:
-        return {"categorias": defaultdict(dict), "total_produtos": 0}
+        return {"categorias": {}, "total_produtos": 0}
     
-    categorias = defaultdict(lambda: {"disponiveis": [], "indisponiveis": []})
+    categorias = {
+        "Pães": {"disponiveis": [], "indisponiveis": []},
+        "Bolos": {"disponiveis": [], "indisponiveis": []},
+        "Mousses": {"disponiveis": [], "indisponiveis": []},
+        "Pastéis": {"disponiveis": [], "indisponiveis": []}
+    }
+    
     for produto in produtos:
         try:
-            # Ajuste para a estrutura esperada
-            nome_categoria = produto.get("categoria", {}).get("nome", "Sem categoria")
+            nome_categoria = normalizar_nome_categoria(produto.get("categoria_nome", "Sem categoria"))
+            if nome_categoria not in categorias:
+                continue
+                
             produto_formatado = {
                 "nome": produto.get("nome", "Sem nome"),
                 "preco": float(produto.get("preco", 0))
@@ -42,7 +60,7 @@ def agrupar_por_categoria(produtos):
             continue
     
     return {
-        "categorias": dict(categorias),  # Convertendo para dict padrão
+        "categorias": categorias,
         "total_produtos": len(produtos) if produtos else 0
     }
 
@@ -55,7 +73,12 @@ def dashboard():
             return render_template('cardapio.html', dados={
                 'erro': 'Não foi possível obter os produtos do servidor',
                 'atualizado_em': datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
-                'categorias': {},
+                'categorias': {
+                    "Pães": {"disponiveis": [], "indisponiveis": []},
+                    "Bolos": {"disponiveis": [], "indisponiveis": []},
+                    "Mousses": {"disponiveis": [], "indisponiveis": []},
+                    "Pastéis": {"disponiveis": [], "indisponiveis": []}
+                },
                 'total_produtos': 0
             })
         
@@ -72,7 +95,12 @@ def dashboard():
         return render_template('cardapio.html', dados={
             'erro': f'Erro no sistema: {str(e)}',
             'atualizado_em': datetime.now().strftime('%d/%m/%Y %H:%M:%S'),
-            'categorias': {},
+            'categorias': {
+                "Pães": {"disponiveis": [], "indisponiveis": []},
+                "Bolos": {"disponiveis": [], "indisponiveis": []},
+                "Mousses": {"disponiveis": [], "indisponiveis": []},
+                "Pastéis": {"disponiveis": [], "indisponiveis": []}
+            },
             'total_produtos': 0
         })
 

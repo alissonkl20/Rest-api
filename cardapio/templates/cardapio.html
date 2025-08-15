@@ -1,312 +1,535 @@
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cardápio Organizado</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✔️</text></svg>">
+    <title>Cardápio Organizado</title>
+    <meta name="color-scheme" content="light dark">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #121212 0%, #1a2e35 100%);
+        :root {
+            /* Light Theme */
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --primary-color: #4e73df;
+            --secondary-color: #1cc88a;
+            --danger-color: #e74a3b;
+            --card-bg: #ffffff;
+            --card-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            --border-color: #e3e6f0;
+            --hover-color: #f6f6f9;
+            
+            /* Dark Theme */
+            --bg-color-dark: #1a1a2e;
+            --text-color-dark: #f8f9fa;
+            --primary-color-dark: #6c63ff;
+            --secondary-color-dark: #20c997;
+            --danger-color-dark: #ff6b6b;
+            --card-bg-dark: #16213e;
+            --card-shadow-dark: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.4);
+            --border-color-dark: #2d3748;
+            --hover-color-dark: #2d3748;
+        }
+
+        [data-theme="light"] {
+            --bg-color: var(--bg-color);
+            --text-color: var(--text-color);
+            --primary-color: var(--primary-color);
+            --secondary-color: var(--secondary-color);
+            --danger-color: var(--danger-color);
+            --card-bg: var(--card-bg);
+            --card-shadow: var(--card-shadow);
+            --border-color: var(--border-color);
+            --hover-color: var(--hover-color);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: var(--bg-color-dark);
+            --text-color: var(--text-color-dark);
+            --primary-color: var(--primary-color-dark);
+            --secondary-color: var(--secondary-color-dark);
+            --danger-color: var(--danger-color-dark);
+            --card-bg: var(--card-bg-dark);
+            --card-shadow: var(--card-shadow-dark);
+            --border-color: var(--border-color-dark);
+            --hover-color: var(--hover-color-dark);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            min-height: 100vh;
             box-sizing: border-box;
-            color: #e0e0e0;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
+
+        body {
+            font-family: 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
         .container {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 24px;
-            background: rgba(30, 30, 30, 0.9);
-            border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            border: 1px solid #444;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
+
         h1 {
-            color: #4caf7d;
+            color: var(--primary-color);
             text-align: center;
-            margin-top: 0;
-            font-size: 2.5em;
-            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
         }
+
+        .update-time {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            color: var(--text-color);
+        }
+
+        .update-time span {
+            color: var(--secondary-color);
+            font-weight: 500;
+        }
+
         .categoria {
-            margin-top: 40px;
-            background: rgba(40, 40, 40, 0.7);
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #444;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border-color);
         }
+
         .categoria-titulo {
-            color: #6bbd99;
-            margin-top: 0;
-            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
             text-align: center;
-            font-size: 1.5em;
+            position: relative;
+            padding-bottom: 10px;
         }
+
+        .categoria-titulo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            border-radius: 3px;
+        }
+
         .status-titulo {
-            color: #6bbd99;
-            margin-top: 20px;
-            margin-bottom: 10px;
-            text-align: left;
-            font-size: 1.2em;
-        }
-        .status-titulo.indisponivel {
-            color: #ff6b6b;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-        li {
-            background: #2a2a2a;
-            margin: 10px 0;
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            font-size: 1.1em;
-            color: #e0e0e0;
-            transition: transform 0.2s, box-shadow 0.2s;
-            animation: fadeIn 0.7s;
             display: flex;
             align-items: center;
-            justify-content: space-between;
             gap: 10px;
-            word-break: break-word;
-            border: 1px solid #444;
+            font-size: 1.3rem;
+            margin: 25px 0 15px;
+            color: var(--secondary-color);
         }
-        li span:first-child {
-            flex-shrink: 0;
-        }
-        li:hover {
-            transform: scale(1.04);
-            box-shadow: 0 4px 16px rgba(107, 189, 153, 0.3);
-            background: #333;
-        }
-        .total-produtos {
-            font-weight: bold;
-            color: #4caf7d;
+
+        .status-titulo i {
             font-size: 1.2em;
-            margin-top: 20px;
-            text-align: center;
         }
-        .erro {
-            color: #ff6b6b;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 20px;
-            animation: shake 0.5s;
+
+        .status-titulo.indisponivel {
+            color: var(--danger-color);
         }
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .produto-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background-color: var(--hover-color);
+        }
+
+        .produto-nome {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .produto-preco {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+
         .sem-produtos {
-            color: #888;
-            font-style: italic;
+            grid-column: 1 / -1;
             text-align: center;
+            padding: 20px;
+            color: var(--text-color);
+            opacity: 0.7;
+            font-style: italic;
         }
+
+        .total-produtos {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .erro {
+            background-color: rgba(231, 74, 59, 0.1);
+            color: var(--danger-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid var(--danger-color);
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border: none;
+            z-index: 100;
+            font-size: 1.3rem;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-toggle:active {
+            transform: scale(0.95);
+        }
+
+        /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px);}
-            to { opacity: 1; transform: translateY(0);}
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes shake {
-            0% { transform: translateX(0);}
-            25% { transform: translateX(-5px);}
-            50% { transform: translateX(5px);}
-            75% { transform: translateX(-5px);}
-            100% { transform: translateX(0);}
+
+        .produto-card {
+            animation: fadeIn 0.5s ease-out;
         }
-        @media (max-width: 700px) {
+
+        /* Responsividade */
+        @media (max-width: 992px) {
             .container {
-                max-width: 98vw;
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .categoria {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .categoria-titulo {
+                font-size: 1.6rem;
+            }
+            
+            .status-titulo {
+                font-size: 1.2rem;
+            }
+            
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
                 padding: 10px;
             }
-            ul {
-                max-width: 98vw;
+            
+            .container {
+                padding: 10px;
             }
+            
             h1 {
-                font-size: 2em;
+                font-size: 1.8rem;
             }
+            
+            .categoria {
+                padding: 15px;
+            }
+            
             .categoria-titulo {
-                font-size: 1.2em;
+                font-size: 1.4rem;
             }
-            .status-titulo {
-                font-size: 1.1em;
+            
+            .produtos-grid {
+                grid-template-columns: 1fr;
             }
-            li {
-                font-size: 1em;
-                padding: 12px 10px;
+            
+            .theme-toggle {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
             }
         }
-        @media (max-width: 500px) {
-            .container {
-                margin: 10px auto;
-                padding: 5vw;
-                border-radius: 10px;
-            }
-            ul {
-                max-width: 100vw;
-            }
-            h1 {
-                font-size: 1.3em;
-            }
-            .categoria-titulo {
-                font-size: 1em;
-            }
-            .status-titulo {
-                font-size: 0.9em;
-            }
-            li {
-                font-size: 0.95em;
-                padding: 8px 5px;
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            li span {
-                margin-bottom: 4px;
-            }
-        } 
     </style>
 </head>
-<body>
+<body data-theme="light">
     <div class="container">
-        <h1>Cardápio Organizado</h1>
-        <p style="text-align:center;">Atualizado em: <span style="color:#6bbd99;">11/08/2025 22:40:08</span></p>
+        <h1><i class="fas fa-utensils"></i> Cardápio Organizado</h1>
+        <p class="update-time">Atualizado em: <span>{{ dados.atualizado_em }}</span></p>
         
-        <!-- Categoria de Pães -->
-        <div class="categoria">
-            <h2 class="categoria-titulo">Pães</h2>
-            
-            <h3 class="status-titulo">Disponíveis</h3>
-            <ul>
-                <li>
-                    <span>Pão fit</span>
-                    <span>R$ 30.00</span>
-                </li>
-                <li>
-                    <span>Pão doce de leite</span>
-                    <span>R$ 50.00</span>
-                </li>
-                <li>
-                    <span>Pão fruta</span>
-                    <span>R$ 30.00</span>
-                </li>
-                <li>
-                    <span>Pão de mandioca</span>
-                    <span>R$ 25.00</span>
-                </li>
-                <li>
-                    <span>Pão de trigo</span>
-                    <span>R$ 25.00</span>
-                </li>
-            </ul>
-            
-            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
-            <ul>
-                <li>
-                    <span>Pão de ma</span>
-                    <span>R$ 30.00</span>
-                </li>
-            </ul>
-        </div>
+        {% if dados.erro %}
+            <div class="erro">
+                <i class="fas fa-exclamation-circle"></i> {{ dados.erro }}
+            </div>
+        {% else %}
+            <!-- Pães -->
+            <div class="categoria">
+                <h2 class="categoria-titulo"><i class="fas fa-bread-slice"></i> Pães</h2>
+                
+                {% if dados.categorias['Pães']['disponiveis'] %}
+                    <h3 class="status-titulo"><i class="fas fa-check-circle"></i> Disponíveis</h3>
+                    <div class="produtos-grid">
+                        {% for produto in dados.categorias['Pães']['disponiveis'] %}
+                            <div class="produto-card">
+                                <span class="produto-nome">{{ produto.nome }}</span>
+                                <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3 class="status-titulo"><i class="fas fa-check-circle"></i> Disponíveis</h3>
+                    <div class="produtos-grid">
+                        <div class="sem-produtos">Nenhum pão disponível</div>
+                    </div>
+                {% endif %}
+                
+                {% if dados.categorias['Pães']['indisponiveis'] %}
+                    <h3 class="status-titulo indisponivel"><i class="fas fa-times-circle"></i> Indisponíveis</h3>
+                    <div class="produtos-grid">
+                        {% for produto in dados.categorias['Pães']['indisponiveis'] %}
+                            <div class="produto-card">
+                                <span class="produto-nome">{{ produto.nome }}</span>
+                                <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3 class="status-titulo indisponivel"><i class="fas fa-times-circle"></i> Indisponíveis</h3>
+                    <div class="produtos-grid">
+                        <div class="sem-produtos">Nenhum pão indisponível</div>
+                    </div>
+                {% endif %}
+            </div>
 
-        <!-- Categoria de Bolos -->
-        <div class="categoria">
-            <h2 class="categoria-titulo">Bolos</h2>
-            
-            <h3 class="status-titulo">Disponíveis</h3>
-            <ul>
-                <li>
-                    <span>Bolo de farofa</span>
-                    <span>R$ 25.00</span>
-                </li>
-                <li>
-                    <span>Bolo de banana</span>
-                    <span>R$ 25.00</span>
-                </li>
-            </ul>
-            
-            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
-            <ul>
-                <li>
-                    <span>Bolo de leite ninho</span>
-                    <span>R$ 36.00</span>
-                </li>
-            </ul>
-        </div>
+            <!-- Bolos -->
+            <div class="categoria">
+                <h2 class="categoria-titulo"><i class="fas fa-birthday-cake"></i> Bolos</h2>
+                
+                {% if dados.categorias['Bolos']['disponiveis'] %}
+                    <h3 class="status-titulo"><i class="fas fa-check-circle"></i> Disponíveis</h3>
+                    <div class="produtos-grid">
+                        {% for produto in dados.categorias['Bolos']['disponiveis'] %}
+                            <div class="produto-card">
+                                <span class="produto-nome">{{ produto.nome }}</span>
+                                <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3 class="status-titulo"><i class="fas fa-check-circle"></i> Disponíveis</h3>
+                    <div class="produtos-grid">
+                        <div class="sem-produtos">Nenhum bolo disponível</div>
+                    </div>
+                {% endif %}
+                
+                {% if dados.categorias['Bolos']['indisponiveis'] %}
+                    <h3 class="status-titulo indisponivel"><i class="fas fa-times-circle"></i> Indisponíveis</h3>
+                    <div class="produtos-grid">
+                        {% for produto in dados.categorias['Bolos']['indisponiveis'] %}
+                            <div class="produto-card">
+                                <span class="produto-nome">{{ produto.nome }}</span>
+                                <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3 class="status-titulo indisponivel"><i class="fas fa-times-circle"></i> Indisponíveis</h3>
+                    <div class="produtos-grid">
+                        <div class="sem-produtos">Nenhum bolo indisponível</div>
+                    </div>
+                {% endif %}
+            </div>
 
-        <!-- Categoria de Mousses -->
-        <div class="categoria">
-            <h2 class="categoria-titulo">Mousses</h2>
-            
-            <h3 class="status-titulo">Disponíveis</h3>
-            <ul>
-                <li>
-                    <span>Mousse de maracujá</span>
-                    <span>R$ 12.00</span>
-                </li>
-                <li>
-                    <span>Mousse de limão</span>
-                    <span>R$ 12.00</span>
-                </li>
-                <li>
-                    <span>Mousse de chocolate</span>
-                    <span>R$ 12.00</span>
-                </li>
-            </ul>
-            
-            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
-            <ul>
-                <li class="sem-produtos">Nenhum mousse indisponível</li>
-            </ul>
-        </div>
+            <!-- Mousses -->
+            <div class="categoria">
+                <h2 class="categoria-titulo"><i class="fas fa-ice-cream"></i> Mousses</h2>
+                
+                {% if dados.categorias['Mousses']['disponiveis'] %}
+                    <h3 class="status-titulo"><i class="fas fa-check-circle"></i> Disponíveis</h3>
+                    <div class="produtos-grid">
+                        {% for produto in dados.categorias['Mousses']['disponiveis'] %}
+                            <div class="produto-card">
+                                <span class="produto-nome">{{ produto.nome }}</span>
+                                <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3 class="status-titulo"><i class="fas fa-check-circle"></i> Disponíveis</h3>
+                    <div class="produtos-grid">
+                        <div class="sem-produtos">Nenhum mousse disponível</div>
+                    </div>
+                {% endif %}
+                
+                {% if dados.categorias['Mousses']['indisponiveis'] %}
+                    <h3 class="status-titulo indisponivel"><i class="fas fa-times-circle"></i> Indisponíveis</h3>
+                    <div class="produtos-grid">
+                        {% for produto in dados.categorias['Mousses']['indisponiveis'] %}
+                            <div class="produto-card">
+                                <span class="produto-nome">{{ produto.nome }}</span>
+                                <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3 class="status-titulo indisponivel"><i class="fas fa-times-circle"></i> Indisponíveis</h3>
+                    <div class="produtos-grid">
+                        <div class="sem-produtos">Nenhum mousse indisponível</div>
+                    </div>
+                {% endif %}
+            </div>
 
-        <!-- Categoria de Tortas -->
-        <div class="categoria">
-            <h2 class="categoria-titulo">Tortas</h2>
-            
-            <h3 class="status-titulo">Disponíveis</h3>
-            <ul>
-                <li>
-                    <span>Torta de calabresa</span>
-                    <span>R$ 30.00</span>
-                </li>
-            </ul>
-            
-            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
-            <ul>
-                <li class="sem-produtos">Nenhuma torta indisponível</li>
-            </ul>
-        </div>
+            <!-- Pastéis -->
+            <div class="categoria">
+                <h2 class="categoria-titulo"><i class="fas fa-drumstick-bite"></i> Pastéis</h2>
+                
+                {% if dados.categorias['Pastéis']['disponiveis'] %}
+                    <h3 class="status-titulo"><i class="fas fa-check-circle"></i> Disponíveis</h3>
+                    <div class="produtos-grid">
+                        {% for produto in dados.categorias['Pastéis']['disponiveis'] %}
+                            <div class="produto-card">
+                                <span class="produto-nome">{{ produto.nome }}</span>
+                                <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3 class="status-titulo"><i class="fas fa-check-circle"></i> Disponíveis</h3>
+                    <div class="produtos-grid">
+                        <div class="sem-produtos">Nenhum pastel disponível</div>
+                    </div>
+                {% endif %}
+                
+                {% if dados.categorias['Pastéis']['indisponiveis'] %}
+                    <h3 class="status-titulo indisponivel"><i class="fas fa-times-circle"></i> Indisponíveis</h3>
+                    <div class="produtos-grid">
+                        {% for produto in dados.categorias['Pastéis']['indisponiveis'] %}
+                            <div class="produto-card">
+                                <span class="produto-nome">{{ produto.nome }}</span>
+                                <span class="produto-preco">R$ {{ "%.2f"|format(produto.preco) }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3 class="status-titulo indisponivel"><i class="fas fa-times-circle"></i> Indisponíveis</h3>
+                    <div class="produtos-grid">
+                        <div class="sem-produtos">Nenhum pastel indisponível</div>
+                    </div>
+                {% endif %}
+            </div>
 
-        <!-- Categoria de Pastéis -->
-        <div class="categoria">
-            <h2 class="categoria-titulo">Pastéis</h2>
-            
-            <h3 class="status-titulo">Disponíveis</h3>
-            <ul>
-                <li>
-                    <span>Pastel de frango</span>
-                    <span>R$ 14.00</span>
-                </li>
-                <li>
-                    <span>Pastel de bacon</span>
-                    <span>R$ 14.00</span>
-                </li>
-            </ul>
-            
-            <h3 class="status-titulo indisponivel">Indisponíveis</h3>
-            <ul>
-                <li>
-                    <span>Pastel de calabresa</span>
-                    <span>R$ 16.00</span>
-                </li>
-                <li>
-                    <span>Pastel de cheddar</span>
-                    <span>R$ 18.00</span>
-                </li>
-            </ul>
-        </div>
-
-        <p class="total-produtos">Total de produtos: 17</p>
+            <p class="total-produtos"><i class="fas fa-clipboard-list"></i> Total de produtos: {{ dados.total_produtos }}</p>
+        {% endif %}
     </div>
+
+    <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+        const currentTheme = localStorage.getItem('theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
+        
+        // Apply the current theme
+        document.body.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+        
+        // Toggle theme on button click
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+            
+            // Add animation
+            themeToggle.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                themeToggle.style.transform = 'scale(1)';
+            }, 100);
+        });
+        
+        // Update theme icon based on current theme
+        function updateThemeIcon(theme) {
+            const icon = themeToggle.querySelector('i');
+            icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+        
+        // Watch for system theme changes
+        prefersDarkScheme.addEventListener('change', e => {
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                document.body.setAttribute('data-theme', newTheme);
+                updateThemeIcon(newTheme);
+            }
+        });
+    </script>
 </body>
 </html>
