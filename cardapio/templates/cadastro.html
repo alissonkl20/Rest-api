@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Criação de Produto | Dashboard Neon</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
@@ -36,10 +37,6 @@
             --neon-blue: #3700ff;
             --neon-purple: #9d00ff;
             --neon-pink: #ff00ea;
-            --dark-bg: #1a1a1a;
-            --light-text: #f0f0f0;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
         }
 
         [data-theme="light"] {
@@ -58,8 +55,6 @@
             --neon-blue: #2a00b3;
             --neon-purple: #6a00b3;
             --neon-pink: #b3009d;
-            --dark-bg: #f8f9fa;
-            --light-text: #212529;
         }
 
         [data-theme="dark"] {
@@ -78,8 +73,6 @@
             --neon-blue: #3700ff;
             --neon-purple: #9d00ff;
             --neon-pink: #ff00ea;
-            --dark-bg: #1a1a1a;
-            --light-text: #f0f0f0;
         }
 
         * {
@@ -99,18 +92,22 @@
             align-items: center;
             padding: 20px;
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .glow-container {
-            background-image: linear-gradient(163deg, var(--neon-green) 0%, var(--neon-blue) 100%);
+            background-image: linear-gradient(163deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             border-radius: 22px;
             transition: all 0.4s;
             padding: 3px;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .container {
             width: 100%;
-            max-width: 800px;
             background: var(--card-bg);
             border-radius: 20px;
             overflow: hidden;
@@ -128,7 +125,7 @@
         }
 
         .header {
-            background: linear-gradient(45deg, var(--primary-color), var(--neon-purple));
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 25px 30px;
             text-align: center;
@@ -137,13 +134,11 @@
         }
 
         .header h1 {
-            font-size: 2.2rem;
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
             font-weight: 600;
             margin-bottom: 5px;
             position: relative;
             z-index: 1;
-            text-shadow: 0 0 10px rgba(157, 0, 255, 0.7);
-            animation: textGlow 2s infinite alternate;
         }
 
         .form-container {
@@ -160,7 +155,7 @@
             margin-bottom: 8px;
             font-weight: 400;
             color: var(--text-color);
-            transition: var(--transition);
+            transition: all 0.3s ease;
         }
 
         .form-control {
@@ -169,9 +164,12 @@
             border: 2px solid var(--border-color);
             border-radius: 8px;
             font-size: 16px;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             background-color: var(--card-bg);
             color: var(--text-color);
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
         }
 
         .form-control:focus {
@@ -192,6 +190,7 @@
             margin-right: 10px;
             accent-color: var(--secondary-color);
             cursor: pointer;
+            flex-shrink: 0;
         }
 
         .checkbox-group label {
@@ -202,7 +201,7 @@
 
         .btn {
             display: inline-block;
-            background: linear-gradient(45deg, var(--primary-color), var(--neon-purple));
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
             padding: 14px 28px;
             border: none;
@@ -210,7 +209,7 @@
             font-size: 16px;
             font-weight: 500;
             cursor: pointer;
-            transition: var(--transition);
+            transition: all 0.3s ease;
             box-shadow: var(--card-shadow);
             width: 100%;
             text-transform: uppercase;
@@ -218,31 +217,17 @@
             position: relative;
             overflow: hidden;
             z-index: 1;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 0 25px rgba(157, 0, 255, 0.7);
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
         }
 
         .btn:active {
             transform: translateY(0);
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--neon-purple), var(--neon-pink));
-            transition: all 0.4s ease;
-            z-index: -1;
-        }
-
-        .btn:hover::before {
-            left: 0;
         }
 
         .output-container {
@@ -258,7 +243,6 @@
             margin-bottom: 15px;
             color: var(--secondary-color);
             font-size: 1.3rem;
-            text-shadow: 0 0 5px rgba(0, 255, 117, 0.3);
         }
 
         #jsonOutput {
@@ -270,6 +254,8 @@
             overflow-x: auto;
             border: 1px solid var(--border-color);
             color: var(--secondary-color);
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
 
         .message {
@@ -306,8 +292,7 @@
             color: var(--secondary-color);
             font-weight: 500;
             opacity: 0;
-            transition: var(--transition);
-            text-shadow: 0 0 5px rgba(0, 255, 117, 0.3);
+            transition: all 0.3s ease;
         }
 
         .form-control:focus + .floating-label,
@@ -335,6 +320,7 @@
             z-index: 100;
             font-size: 1.3rem;
             transition: all 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .theme-toggle:hover {
@@ -355,11 +341,6 @@
             0% { box-shadow: 0 0 10px rgba(0, 255, 117, 0.3); }
             50% { box-shadow: 0 0 20px rgba(55, 0, 255, 0.5); }
             100% { box-shadow: 0 0 15px rgba(157, 0, 255, 0.7); }
-        }
-
-        @keyframes textGlow {
-            from { text-shadow: 0 0 5px rgba(157, 0, 255, 0.7); }
-            to { text-shadow: 0 0 15px rgba(157, 0, 255, 1); }
         }
 
         /* Efeito de onda no botão */
@@ -388,14 +369,18 @@
         #productNamesList li {
             padding: 8px 0;
             border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .categoria-verde {
+            color: var(--secondary-color);
+            font-weight: bold;
         }
 
         /* Responsividade */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
             .form-container {
                 padding: 20px;
             }
@@ -403,23 +388,9 @@
             .btn {
                 padding: 12px 20px;
             }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
             
-            .header {
-                padding: 20px 15px;
-            }
-            
-            .header h1 {
-                font-size: 1.5rem;
-            }
-            
-            .form-control {
-                padding: 10px 12px;
+            .output-container {
+                padding: 15px;
             }
             
             .theme-toggle {
@@ -427,12 +398,138 @@
                 height: 45px;
                 bottom: 20px;
                 right: 20px;
+                font-size: 1.1rem;
             }
         }
 
-        .categoria-verde {
-            color: var(--secondary-color);
-            font-weight: bold;
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+                display: block;
+                min-height: auto;
+            }
+            
+            .glow-container {
+                margin: 20px auto;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .form-control {
+                padding: 10px 12px;
+                font-size: 15px;
+            }
+            
+            .checkbox-group label {
+                font-size: 14px;
+            }
+            
+            .btn {
+                font-size: 15px;
+                padding: 12px 15px;
+            }
+            
+            .output-container h2 {
+                font-size: 1.1rem;
+            }
+            
+            #jsonOutput {
+                font-size: 13px;
+                padding: 10px;
+            }
+            
+            #productNamesList li {
+                font-size: 14px;
+            }
+        }
+
+        /* Melhorias para dispositivos móveis */
+        @media (hover: none) {
+            .btn:hover {
+                transform: none;
+                box-shadow: var(--card-shadow);
+            }
+            
+            .glow-container:hover {
+                box-shadow: none;
+            }
+            
+            .glow-container:hover .container {
+                transform: none;
+            }
+        }
+
+        /* Melhorias para acessibilidade */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+
+        /* Melhorias para navegadores antigos */
+        @supports not (display: flex) {
+            body {
+                display: block;
+                padding-top: 40px;
+                padding-bottom: 40px;
+            }
+            
+            .checkbox-group {
+                display: block;
+            }
+            
+            .checkbox-group input {
+                display: inline-block;
+                vertical-align: middle;
+            }
+            
+            .checkbox-group label {
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+
+        /* Adicionando suporte para impressão */
+        @media print {
+            .glow-container {
+                background-image: none;
+                padding: 0;
+                box-shadow: none;
+            }
+            
+            .container {
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .header {
+                background: #444 !important;
+                color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .btn, .theme-toggle {
+                display: none !important;
+            }
+            
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            #jsonOutput {
+                white-space: pre;
+                overflow: visible;
+            }
         }
     </style>
 </head>
@@ -459,7 +556,7 @@
                     
                     <div class="form-group">
                         <label for="preco">Preço (R$):</label>
-                        <input type="number" id="preco" name="preco" class="form-control" step="0.01" min="0" required placeholder=" ">
+                        <input type="number" id="preco" name="preco" class="form-control" step="0.01" min="0" required placeholder=" " inputmode="decimal">
                         <span class="floating-label">Obrigatório</span>
                     </div>
                     
@@ -473,7 +570,7 @@
                     
                     <div class="form-group">
                         <label for="categoria">Categoria:</label>
-                        <input type="text" id="categoria" name="categoria" class="form-control" placeholder=" ">
+                        <input type="text" id="categoria" name="categoria" class="form-control" placeholder=" " inputmode="numeric">
                         <span class="floating-label">Opcional</span>
                     </div>
                     
@@ -507,11 +604,23 @@
         </div>
     </div>
 
-    <button class="theme-toggle" id="themeToggle">
+    <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema">
         <i class="fas fa-moon"></i>
     </button>
 
     <script>
+        // Verifica se o navegador suporta as APIs modernas
+        if (!window.Promise || !window.fetch || !window.URLSearchParams) {
+            document.getElementById('message').textContent = 'Seu navegador é muito antigo. Por favor, atualize para a versão mais recente.';
+            document.getElementById('message').className = 'message error';
+            document.getElementById('message').style.display = 'block';
+            
+            // Desabilita todos os botões
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.disabled = true;
+            });
+        }
+
         const API_BASE_URL = 'http://127.0.0.1:5000/api';
         
         // Verifica se há um ID na URL para carregar os dados do produto
@@ -525,6 +634,12 @@
 
             // Carrega a lista de produtos cadastrados
             loadProductNames();
+
+            // Adiciona evento de submit ao formulário para evitar envio padrão
+            document.getElementById('productForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                handleSubmit();
+            });
         });
 
         // Theme Toggle Functionality
@@ -556,6 +671,7 @@
         function updateThemeIcon(theme) {
             const icon = themeToggle.querySelector('i');
             icon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+            icon.setAttribute('aria-hidden', 'true');
         }
         
         // Watch for system theme changes
@@ -570,8 +686,12 @@
         // Efeito ripple nos botões
         document.querySelectorAll('.btn').forEach(button => {
             button.addEventListener('click', function(e) {
-                const x = e.clientX - e.target.getBoundingClientRect().left;
-                const y = e.clientY - e.target.getBoundingClientRect().top;
+                // Verifica se é um dispositivo touch para evitar efeitos indesejados
+                if ('ontouchstart' in window) return;
+                
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
                 
                 const ripple = document.createElement('span');
                 ripple.classList.add('ripple-effect');
@@ -652,7 +772,11 @@
                     list.innerHTML = '';
                     produtos.forEach(produto => {
                         const li = document.createElement('li');
-                        li.textContent = `${produto.nome} - R$ ${produto.preco.toFixed(2)}`;
+                        li.innerHTML = `
+                            <span>${produto.nome}</span>
+                            <span>R$ ${produto.preco.toFixed(2)}</span>
+                            <span class="categoria-verde">${produto.disponivel ? 'Disponível' : 'Indisponível'}</span>
+                        `;
                         list.appendChild(li);
                     });
                 }
@@ -761,7 +885,7 @@
                 }, 1000);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<span>Cadastrar Produto</span>';
+                btn.innerHTML = '<span id="buttonText">Cadastrar Produto</span>';
             }
         }
 
@@ -836,7 +960,7 @@
                 }, 1000);
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = '<span>Atualizar Produto</span>';
+                btn.innerHTML = '<span id="buttonText">Atualizar Produto</span>';
             }
         }
 
@@ -976,4 +1100,4 @@
         }
     </script>
 </body>
-</html>git commit -m "Primer commit: subiendo mi proyecto"
+</html>
