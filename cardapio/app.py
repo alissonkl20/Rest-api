@@ -1,11 +1,13 @@
 from flask import Flask, render_template
 from datetime import datetime
 import requests
+from flask_cors import CORS
 import time
 
 app = Flask(__name__,
             static_folder='static',
             template_folder='templates')
+CORS(app)
 
 API_BASE_URL = 'http://127.0.0.1:5000/api'
 
@@ -65,6 +67,10 @@ def agrupar_por_categoria(produtos):
     }
 
 @app.route('/')
+def home():
+    return render_template('dashboard.html')
+
+@app.route('/cardapio')
 def dashboard():
     try:
         produtos = get_api_data("produtos")
@@ -103,6 +109,10 @@ def dashboard():
             },
             'total_produtos': 0
         })
+
+@app.route('/cadastro')
+def cadastro():
+    return render_template('cadastro.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
